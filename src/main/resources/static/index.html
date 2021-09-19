@@ -1,0 +1,103 @@
+<html>
+    <head>
+        <script>
+            async function getData() {
+                const postcode = document.getElementById("inPostcode").value;
+                const url = `/data/byPostcode/${postcode}`;
+                let cases = await fetch(url)
+                .then(response => response.json())
+                .then(data => data.covidCases);
+                renderData(cases);
+            }
+            function renderData(cases) {
+                const parent = document.getElementById("caseNumbers");
+                parent.innerHTML = "";
+                let header = document.createElement("h3");
+                header.innerHTML = `Total cases: ${cases.length}`;
+                parent.appendChild(header);
+                const headerRow = createTableHeader();
+                parent.appendChild(headerRow);
+                cases.forEach(c => {
+                    const row = document.createElement("div");
+                    row.className = "row";
+                    let d = new Date(c.notification_date);
+                    let ye = new Intl.DateTimeFormat('en', { year: 'numeric' }).format(d);
+                    let mo = new Intl.DateTimeFormat('en', { month: 'short' }).format(d);
+                    let da = new Intl.DateTimeFormat('en', { day: '2-digit' }).format(d);
+                    let caseDate = `${da}-${mo}-${ye}`;
+                    const v1 = document.createElement("div");
+                    v1.className = "col";
+                    v1.innerHTML = `<span> ${caseDate} </span>`;
+                    row.appendChild(v1);
+
+                    const v2 = document.createElement("div");
+                    v2.innerHTML = `<span> ${c.likely_source_of_infection} </span>`;
+                    v2.className = "col";
+                    row.appendChild(v2);
+                    parent.appendChild(row);
+                });
+            }
+            function createTableHeader() {
+                const headerRow = document.createElement("div");
+                headerRow.className = "row";
+
+                const col1 = document.createElement("div");
+                col1.className = "col";
+                col1.innerHTML = `<h3> Date </h3>`;
+
+                const col2 = document.createElement("div");
+                col2.className = "col";
+                col2.innerHTML = `<h3> Likely Source </h3>`;
+
+                headerRow.appendChild(col1);
+                headerRow.appendChild(col2);
+                return headerRow;
+            }
+        </script>
+        <style>
+            .localCovidReport {
+                margin:auto; 
+                width:50%; 
+                display:flex; 
+                flex-direction: column; 
+                align-items: center;
+            }
+            .table {
+                display: flex; 
+                flex-direction: column;
+            }
+            .row {
+                width: 100%; 
+                display: flex; 
+                flex-direction: row;
+            }
+            .col {
+                width: 50%;
+                padding: 10px;
+                border: 1px dashed greenyellow;
+            }
+        </style>
+
+    </head>
+    <body>
+    <div class="localCovidReport">
+        <h3> Welcome to Covid cases info </h3>
+        <div>
+
+            <input id="inPostcode" type="text" placeholder="Enter your postcode" />
+            <button onclick="getData()" > Load </button>
+        </div>
+        <hr style="width: 100%;" />
+        <div id="caseNumbers" class="table">
+            <!--<div id="row" class="row">
+                <div class="col"><span> Sample</span></div>
+                <div class="col"><span> Sample</span></div>
+            </div>
+            <div id="row" class="row">
+                <div class="col"><span> Sample</span></div>
+                <div class="col"><span> Sample</span></div>
+            </div>
+        </div>-->
+    </div>
+    </body>
+</html>
