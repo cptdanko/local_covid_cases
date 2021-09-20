@@ -1,6 +1,9 @@
 package com.mydaytodo.covid.service;
 
 import com.mydaytodo.covid.models.Dataset;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.core.io.Resource;
+import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
@@ -19,6 +22,10 @@ public class CSVParserImpl implements  CSVParser {
 
     private Dataset dataCache = new Dataset();
     private final String defaultFilename = "cnfrm_case_table4_location_likely_source.csv";
+
+    @Autowired
+    ResourceLoader resourceLoader;
+
     public CSVParserImpl() {
         super();
         this.parseDataset(this.defaultFilename);
@@ -29,8 +36,9 @@ public class CSVParserImpl implements  CSVParser {
 
         try {
             //cnfrm_case_table4_location_likely_source.csv
-            File file = ResourceUtils.getFile("classpath:"+ filePath);
-            BufferedReader reader = new BufferedReader(new FileReader(file));
+            String filename = "classpath:"+ filePath;
+            InputStream is = this.getClass().getClassLoader().getResourceAsStream(filePath);
+            BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             //skip the first line
             String headerStr = reader.readLine();
             String line = null;

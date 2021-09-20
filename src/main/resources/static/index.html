@@ -1,5 +1,6 @@
 <html>
     <head>
+        <meta name="viewport" content="viewport-fit=cover, width=device-width, initial-scale=1.0, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no" />
         <script>
             async function getData() {
                 const postcode = document.getElementById("inPostcode").value;
@@ -53,6 +54,14 @@
                 headerRow.appendChild(col2);
                 return headerRow;
             }
+            function toggleDetails() {
+                let display = document.getElementById("caseNumbers").style.display;
+                if(display === 'none') {
+                    document.getElementById("caseNumbers").style.display = "flex";
+                } else {
+                    document.getElementById("caseNumbers").style.display = "none";
+                }
+            }
         </script>
         <style>
             .localCovidReport {
@@ -88,16 +97,8 @@
             <button onclick="getData()" > Load </button>
         </div>
         <hr style="width: 100%;" />
-        <div id="caseNumbers" class="table">
-            <!--<div id="row" class="row">
-                <div class="col"><span> Sample</span></div>
-                <div class="col"><span> Sample</span></div>
-            </div>
-            <div id="row" class="row">
-                <div class="col"><span> Sample</span></div>
-                <div class="col"><span> Sample</span></div>
-            </div>
-        </div>-->
+        <button onclick="toggleDetails()">Toggle Details</button>
+        <div id="caseNumbers" class="table"> </div>
     </div>
     </body>
 </html>
