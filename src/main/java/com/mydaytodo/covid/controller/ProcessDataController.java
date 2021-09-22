@@ -1,5 +1,6 @@
 package com.mydaytodo.covid.controller;
 
+import com.mydaytodo.covid.models.CasesByDate;
 import com.mydaytodo.covid.models.CovidCase;
 import com.mydaytodo.covid.models.Dataset;
 import com.mydaytodo.covid.service.CSVParser;
@@ -26,5 +27,10 @@ public class ProcessDataController {
     @GetMapping("/byPostcode/{postcode}")
     public Dataset casesByPostcode(@PathVariable("postcode") Integer postcode) {
         return csvParser.byPostcode(postcode);
+    }
+
+    @GetMapping("/byPostcode/{postcode}/aggregate")
+    public List<CasesByDate> aggregateCasesByPcode(@PathVariable("postcode") Integer postcode) {
+        return csvParser.caseAggregateByInf(postcode);
     }
 }

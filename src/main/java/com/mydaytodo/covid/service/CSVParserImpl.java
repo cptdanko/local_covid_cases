@@ -1,5 +1,6 @@
 package com.mydaytodo.covid.service;
 
+import com.mydaytodo.covid.models.CasesByDate;
 import com.mydaytodo.covid.models.Dataset;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.Resource;
@@ -8,6 +9,7 @@ import org.springframework.stereotype.Repository;
 import org.springframework.util.ResourceUtils;
 
 import java.io.*;
+import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
 import java.util.logging.Logger;
@@ -35,8 +37,6 @@ public class CSVParserImpl implements  CSVParser {
         List<CovidCase> cases = new ArrayList<>();
 
         try {
-            //cnfrm_case_table4_location_likely_source.csv
-            String filename = "classpath:"+ filePath;
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
             //skip the first line
@@ -80,5 +80,36 @@ public class CSVParserImpl implements  CSVParser {
         Dataset newDs = new Dataset();
         newDs.setCovidCases(cases);
         return newDs;
+    }
+
+    @Override
+    public List<CasesByDate> caseAggregateByInf(Integer postcode) {
+        DateFormat df = new SimpleDateFormat("dd/MM/yyyy");
+        Map<String, CasesByDate> caseMap = new HashMap<>();
+        for(CovidCase c: dataCache.getCovidCases()) {
+
+            if((c.getPostcode() != null) && c.getPostcode().equals(postcode)) {
+                String pattern = c.getLikely_source_of_infection()
+                        .trim()
+                        .toLowerCase(Locale.ROOT) + ":" + df.format(c.getNotification_date());
+                CasesByDate caseByDate = caseMap.get(pattern);
+                if (caseByDate == null) {
+                    caseByDate = new CasesByDate();
+                    caseByDate.setDate(c.getNotification_date());
+                    caseByDate.setLhdName(c.getLhd_2010_name());
+                    caseByDate.setSource(c.getLikely_source_of_infection());
+                }
+                caseByDate.setCount(caseByDate.getCount() + 1);
+                caseMap.put(pattern, caseByDate);
+            }
+        }
+        List<CasesByDate> cases = caseMap.values().stream().collect(Collectors.toList());
+        cases.sort(new Comparator<CasesByDate>() {
+            @Override
+            public int compare(CasesByDate o1, CasesByDate o2) {
+                return o2.getDate().compareTo(o1.getDate());
+            }
+        });
+        return cases;
     }
 }
