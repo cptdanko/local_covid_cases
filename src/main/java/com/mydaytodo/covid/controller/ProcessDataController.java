@@ -10,7 +10,13 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ConcurrentLinkedDeque;
+import java.util.concurrent.ExecutionException;
+import java.util.function.Supplier;
+
 
 @RestController
 @RequestMapping("data")
@@ -32,5 +38,31 @@ public class ProcessDataController {
     @GetMapping("/byPostcode/{postcode}/aggregate")
     public List<CasesByDate> aggregateCasesByPcode(@PathVariable("postcode") Integer postcode) {
         return csvParser.caseAggregateByInf(postcode);
+    }
+    private String getFutureResult(int count) throws Exception {
+        CompletableFuture<String> fute = CompletableFuture.supplyAsync(new Supplier<String>() {
+            @Override
+            public String get() {
+                if(count == 0) {
+                    return "Async recurse call finished";
+                }
+                try {
+                    Thread.sleep(3000);
+                    System.out.println(String.format("Doing %s recursive call", count));
+                    return getFutureResult( count - 1);
+                } catch ( Exception e) {
+                    e.printStackTrace();
+                }
+                return "";
+            }
+        });
+        try {
+            return fute.get();
+        } catch (Exception e) {
+            throw new Exception("Unable to get future value");
+        }
+    }
+    public String testFuture() throws Exception {
+        return getFutureResult(3);
     }
 }

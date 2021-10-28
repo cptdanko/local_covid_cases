@@ -45,7 +45,7 @@ function renderAggregate(data) {
 
       const summaryDiv = document.createElement("div");
       summaryDiv.style.textAlign = "center";
-      summaryDiv.innerHTML = `<p> <b>${value.total}</b> cases on
+      summaryDiv.innerHTML = `<p> <b>${value.total}</b> case(s) on
                               <b>${formatDate(key)}</b></p>
                                <hr />`;
       card.appendChild(summaryDiv);

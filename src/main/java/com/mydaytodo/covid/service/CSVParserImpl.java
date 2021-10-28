@@ -3,21 +3,15 @@ package com.mydaytodo.covid.service;
 import com.mydaytodo.covid.models.CasesByDate;
 import com.mydaytodo.covid.models.Dataset;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.io.Resource;
 import org.springframework.core.io.ResourceLoader;
 import org.springframework.stereotype.Repository;
-import org.springframework.util.ResourceUtils;
 
 import java.io.*;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.*;
-import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.stream.Collectors;
 import com.mydaytodo.covid.models.CovidCase;
-
-import javax.swing.text.DateFormatter;
 
 @Repository
 public class CSVParserImpl implements  CSVParser {
@@ -35,7 +29,6 @@ public class CSVParserImpl implements  CSVParser {
     @Override
     public Dataset parseDataset(String filePath) {
         List<CovidCase> cases = new ArrayList<>();
-
         try {
             InputStream is = this.getClass().getClassLoader().getResourceAsStream(filePath);
             BufferedReader reader = new BufferedReader(new InputStreamReader(is));
@@ -51,8 +44,6 @@ public class CSVParserImpl implements  CSVParser {
                     if(o1.getNotification_date() == null || o2.getNotification_date() == null){
                         return 0;
                     }
-
-                    int comparison = o2.getNotification_date().compareTo(o1.getNotification_date());
                     return o1.getNotification_date().compareTo(o2.getNotification_date());
                 }
             });
