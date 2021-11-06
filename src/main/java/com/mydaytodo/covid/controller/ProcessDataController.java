@@ -39,30 +39,4 @@ public class ProcessDataController {
     public List<CasesByDate> aggregateCasesByPcode(@PathVariable("postcode") Integer postcode) {
         return csvParser.caseAggregateByInf(postcode);
     }
-    private String getFutureResult(int count) throws Exception {
-        CompletableFuture<String> fute = CompletableFuture.supplyAsync(new Supplier<String>() {
-            @Override
-            public String get() {
-                if(count == 0) {
-                    return "Async recurse call finished";
-                }
-                try {
-                    Thread.sleep(3000);
-                    System.out.println(String.format("Doing %s recursive call", count));
-                    return getFutureResult( count - 1);
-                } catch ( Exception e) {
-                    e.printStackTrace();
-                }
-                return "";
-            }
-        });
-        try {
-            return fute.get();
-        } catch (Exception e) {
-            throw new Exception("Unable to get future value");
-        }
-    }
-    public String testFuture() throws Exception {
-        return getFutureResult(3);
-    }
 }
