@@ -9,11 +9,13 @@ This is a simple web app that was a weekend hack that tells you the the number o
 
 ## How to run
 You can also run it from the command line (or command prompt for windows users).
-1. Clone the repository
-2. cd <project-directory>
-3. mvn clean install
-4. mvn spring-boot:run
-5. Enter http://localhost:5000/ in your browser
+```ssh
+git clone https://github.com/cptdanko/localCovidCases.git
+cd localCovidCases
+mvn clean install
+mvn spring-boot:run
+open browser and enter http://localhost:5000/
+```
 
 ### How to run in IDE
 This project has only been tested in IntelliJ CE IDE.
