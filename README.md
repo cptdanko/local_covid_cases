@@ -96,8 +96,11 @@ See Lombok in action above
 # More great tutorials and code samples
 Checkout [this blog] for more "how-to" code samples, tutorials and just info on how to solve problems.
 
+If you like what I am doing, you can [buy me a coffee]
+
 Click on the next link for more info on the 13+ year [software engineering career journey] of the author.
 
+[buy me a coffee]: https://www.buymeacoffee.com/bhumansoni
 [software engineering career journey]: https://mydaytodo.com/the-3-stages-of-a-software-engineering-career/
 [this blog]: https://mydaytodo.com/blog/
 [This method of the source code]: https://github.com/cptdanko/localCovidCases/blob/1d3fc314a27c5430cad8c1c976d745e1ffa57c58/src/main/java/com/mydaytodo/covid/service/CSVParserImpl.java#L77
