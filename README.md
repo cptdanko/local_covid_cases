@@ -1,4 +1,4 @@
-# Lcoal Covid Cases
+# Local Covid Cases
 This is a simple web app that was a weekend hack that tells you the the number of Covid cases in your suburb in Sydney, New South Wales.
 
 ## Tech Stack
